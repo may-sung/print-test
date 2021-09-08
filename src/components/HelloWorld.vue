@@ -4,6 +4,7 @@
 
     <div ref="printArea">
       <div class="print-view" v-if="isPrintPOP">
+        <p>test</p>
         <p class="test">인쇄 영역을 테스트합니다. 다국어 폰트 대응을 테스트합니다.</p>
         <p>印刷領域をテストします。多言語フォント対応をテストします。</p>
         <p>测试打印区域 。 测试多语种字体对应。</p>
