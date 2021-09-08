@@ -1,58 +1,82 @@
 <template>
   <div class="hello">
+    <button @click="showPrint">인쇄하기</button>
+
+    <div ref="printArea">
+      <div class="print-view" v-if="isPrintPOP">
+        <p class="test">인쇄 영역을 테스트합니다. 다국어 폰트 대응을 테스트합니다.</p>
+        <p>印刷領域をテストします。多言語フォント対応をテストします。</p>
+        <p>测试打印区域 。 测试多语种字体对应。</p>
+        <p>Test the print area. Test multilingual font response.</p>
+
+        <button @click="closePrint">닫기</button>
+      </div>
+    </div>
+
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
+
   props: {
     msg: String
+  },
+
+  data: function() {
+    return {
+      isPrintPOP: false
+    }
+  },
+
+  mounted() {
+    
+  },
+
+  methods: {
+    // goPrint: function() {
+    //   this.showPrint();
+    //   this.startPrint();
+    // },
+
+    showPrint: function() {
+      this.isPrintPOP = true;
+
+      this.$nextTick(function() {
+        this.startPrint();
+      });
+    },
+
+    startPrint: function() {
+      let app = document.getElementById('app')
+      const printContents = this.$refs.printArea.innerHTML
+      let printDiv = document.createElement('DIV')
+
+      // console.log(printDiv);
+
+      printDiv.innerHTML = printContents
+      document.body.appendChild(printDiv)
+      app.style.display = 'none'
+      window.print();
+
+      app.style.display = 'block'
+      printDiv.style.display = 'none'
+      printDiv.innerHTML = ''
+    },
+
+    closePrint: function() {
+      this.isPrintPOP = false;
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+/* @page { size: landscape; } */
+.print-view { position: absolute; width: 500px; height: 500px; background: aqua !important; -webkit-print-color-adjust: exact; left: 50%; margin-left: -250px; }
+.print-view p { border: 5px solid red; }
+.print-view .test { background: rgb(136, 136, 138); }
 </style>
